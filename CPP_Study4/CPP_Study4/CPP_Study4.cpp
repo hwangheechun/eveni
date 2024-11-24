@@ -66,6 +66,19 @@ int main()
 
 	flag |= (1 << 2);
 
+	//flag의 4번째 자리의 비트가 무적 여부의 비트일 경우
+	//bitmask
+	bool invincible = (flag & (1 << 3)) != 0;
+	//flag와 비트마스크 문법을 사용한 1 << 3의 & 연산 : 4번째 자리를 비교하고 4번째 자리를 1로 만들기.나머지 자리는 0
+	//4번째 자리를 1로 켰을 때 0인지 아닌지 확인 : 무적이라면 0이 아닐 것
+	//0이 아니라면 무적을 의미하는 변수 invincible의 값이 true, 1임
+
+	//flag의 2번째 자리의 비트가 스턴 상태 여부의 비트일 경우 포함
+	bool stunOrInvincible = (flag & 0b1010) != 0;
+	//flag와 0b1010의 & 연산 : 2번째와 4번째 자리의 비트를 1로 만들기.나머지 자리는 0
+	//
+
+
 	cout << flag << endl;
 #pragma endregion
 }
