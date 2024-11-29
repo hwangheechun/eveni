@@ -4,6 +4,7 @@
 #include <iostream>
 using namespace std;
 
+//(사용자 정의 자료형) 열거형 enum으로 플레이어 몬스터 타입을 상수값으로 정의한다
 enum PlayerType
 {
     PT_Knight = 1,
@@ -18,6 +19,7 @@ enum MonsterType
     MT_Skeleton = 3
 };
 
+//구조체 정의. 다양한 자료형을 한데 묶어 관리할 수 있다
 struct ObjectInfo
 {
     int type;
@@ -26,18 +28,22 @@ struct ObjectInfo
     int defence;
 };  
 
+//정의된 구조체 타입의 변수 선언
 ObjectInfo playerInfo;
 ObjectInfo monsterInfo;
 
-void EnterLobby();
-void SelectPlayer();
-void EnterField();
-void CreateRandomMonster();
-void EnterBattle();
+//게임에 필요한 함수 정의.
+void EnterLobby();  //로비 입장
+void SelectPlayer();    //플레이어 선택
+void EnterField();  //필드 입장
+void CreateRandomMonster(); //무작위 몬스터 생성
+void EnterBattle(); //전투 입장
 
 int main()
 {
-    srand(time(0));
+    srand(time(0)); 
+    //srand(시드값). 시드값에 따라 난수의 리스트를 받아오는데 시드값이 달라지면 난수도 달라짐
+    //시드값이 계속 달라져야 난수도 계속 달라지기 때문에 시간을 시드값으로 설정함
 
     EnterLobby();
 
@@ -69,7 +75,7 @@ void EnterLobby()
         else
         {
             return;
-        }
+        }   //2 말고 다른 키를 눌러도 함수 종료
     }
 }
 
@@ -122,6 +128,7 @@ void EnterField()
         cout << "[Player] HP : " << playerInfo.hp << " / ATT : " << playerInfo.attack << " / DEF : " << playerInfo.defence << endl;
 
         CreateRandomMonster();
+        //몬스터 무작위 생성
 
         cout << "-------------------" << endl;
         cout << "(1)전투 (2)도주" << endl;
@@ -133,7 +140,7 @@ void EnterField()
         if (input == 1)
         {
             EnterBattle();
-            if (playerInfo.hp == 0)
+            if (playerInfo.hp == 0) //플레이어의 체력이 0이라면 전투를 하고 싶어도 할 수 X
                 return;
         }
         else
