@@ -104,6 +104,7 @@ int main()
 	char test3[1];
 
 	//test3 = test2;	test3는 바구니가 아니라 첫 바구니의 시작 주소(누누히 얘기)
+
 #pragma endregion
 
 	return 0;
