@@ -93,7 +93,7 @@ int StrCmp(char* a, char* b)
     return 0;
 }
 
-#pragma warning(disable: 4996)
+#pragma warning(disable: 4996)  //4996번 에러를 무시하겠다
 
 void ReverseStr(char* str)  //문자열 뒤집는 함수
 {   
