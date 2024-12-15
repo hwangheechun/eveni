@@ -135,7 +135,7 @@ int checkBingo(int(*bingo)[BINGO_SIZE]) //int 타입으로 빙고 개수 세기(피드백 후 
 
 int checkAI(int(*bingoAI)[BINGO_SIZE])  //AI의 기술
 {
-    //1. 가로 -> 세로 -> 대각선 순서로 5칸을 채우기 위해 필요한 칸이 제일 적은 줄 찾기
+    //1. 가로 -> 세로 -> 대각선 순서로 5칸을 채우기 위해 필요한 칸이 제일 적은 줄 찾기 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //2. 가운데부터 채우기(겹치는 부분이 많은 곳)
     //3. 꼭짓점 4군데 먼저 채우기
     //4. 플레이어가 입력한 값을 토대로 플레이어 빙고판을 예측해서 플레이어가 빙고가 안 되는 곳에서 AI 빙고가 되는 곳 고르기
@@ -147,12 +147,15 @@ int checkAI(int(*bingoAI)[BINGO_SIZE])  //AI의 기술
     int bestYCount = 0;
     int temp1 = BINGO_SIZE;
     int temp2 = BINGO_SIZE;
+    int temp3 = 0;
+    int temp4 = 0;
 
     //가로, 세로 세서 빙고가 되기 위해 필요한 칸 개수 세서 개수가 적은 쪽일 수록 최선
     //빙고가 되지 않았는데 되는 줄이 있다면 우선 먹기(XCount가 4보다 낮고 1에 가까울수록 좋음)
     for (int i = 0; i < BINGO_SIZE; i++)
     {
-        
+        bestXCount = 0;
+
         for (int j = 0; j < BINGO_SIZE; j++)  
         {
             if (bingoAI[i][j] != 999) {  
@@ -160,47 +163,118 @@ int checkAI(int(*bingoAI)[BINGO_SIZE])  //AI의 기술
             }
         }
 
-        if (bestXCount != 0 && bestXCount < temp1)
+        //i번째 가로줄이 최선인지 판별하는 구문
+        if (bestXCount > 0 && bestXCount != BINGO_SIZE)   //1개 이상 칸이 지워졌으며 빙고가 된 줄이 아니라면
         {
-            temp1 = bestXCount;
-            bestXCount = 0;
-            bestX = i;
-        }
+            if (bestXCount <= temp1)  //i번째 줄에 지울 칸이 이전에 빙고가 되기 위해 가장 적게 지워야 했던 줄의 칸 수보다 적으면
+                //<=는 값이 같으면 최신 인덱스로 갱신하고 <는 값이 같으면 윗 인덱스를 우선한다
+            {
+                temp1 = bestXCount;
+                bestX = i;
+            }
+        }           
     }
 
-    /*for (int i = 0; i < BINGO_SIZE; i++)
+    for (int i = 0; i < BINGO_SIZE; i++)
     {
+        bestYCount = 0;
+
         for (int j = 0; j < BINGO_SIZE; j++)
         {
-            if (bingoAI[bestY][j] != 999) {
+            if (bingoAI[j][i] != 999) {
                 bestYCount++;
             }
         }
 
-        if (bestYCount != 0 && bestYCount < temp2)
+        //i번째 가로줄이 최선인지 판별하는 구문
+        if (bestYCount > 0 && bestYCount != BINGO_SIZE)   //1개 이상 칸이 지워졌으며 빙고가 된 줄이 아니라면
         {
-            temp2 = bestYCount;
-            bestYCount = 0;
-            bestY = i;
+            if (bestYCount <= temp2)
+                //<=는 값이 같으면 최신 인덱스로 갱신하고 <는 값이 같으면 윗 인덱스를 우선한다
+            {
+                temp2 = bestYCount;
+                bestY = i;
+            }
         }
     }
 
-    best = bingoAI[bestX][bestY];*/
-
-    return temp1;
-}
-
-int checkAI2(int(*bingoAI)[BINGO_SIZE])  //AI의 기술2
-{
     for (int i = 0; i < BINGO_SIZE; i++)
     {
-        for (int j = 0; j < BINGO_SIZE; j++)
-        {
+        if (bingoAI[i][i] != 999)
+            temp3++;
+    }
 
+    for (int i = 0; i < BINGO_SIZE; i++)    //<-방향 대각선
+    {
+        if (bingoAI[i][BINGO_SIZE - 1 - i] != 999)
+        {
+            temp4++;
         }
     }
 
-    return 0;
+    cout << "----------------------- AI -----------------------" << endl << endl;
+    cout << temp1 << "개만 지우면 빙고가 되는 " << bestX << "번 가로줄과" << endl;
+    cout << temp2 << "개만 지우면 빙고가 되는 " << bestY << "번 세로줄이 있네요" << endl 
+        << "왼쪽 대각선은 " << temp3 << "개를 지워야 되고" << endl 
+        << "오른쪽 대각선은 " << temp4 <<"개를 지워야 하네요" << endl << "제 차례가 오면 저는 ";
+    
+    if (temp1 < temp2)
+    {
+        bool check = false;
+
+        while (!check)
+        {
+            for (int i = 0; i < BINGO_SIZE; i++)
+            {
+                if (bingoAI[bestX][i] != 999) {
+                    cout << bingoAI[bestX][i] << "을(를) 지우겠습니다" << endl;
+                    best = bingoAI[bestX][i];
+                    bingoAI[bestX][i] = 999;
+                    check = true;
+                    break;
+                }
+            }
+        }
+    }
+    else if (temp1 == temp2)
+    {
+        bool check = false;
+
+        while (!check)
+        {
+            for (int i = 0; i < BINGO_SIZE; i++)
+            {
+                if (bingoAI[bestX][i] != 999) {
+                    cout << bingoAI[bestX][i] << "을(를) 지우겠습니다" << endl;
+                    best = bingoAI[bestX][i];
+                    bingoAI[bestX][i] = 999;
+                    check = true;
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        bool check = false;
+
+        while (!check)
+        {
+            for (int i = 0; i < BINGO_SIZE; i++)
+            {
+                if (bingoAI[i][bestY] != 999) {
+                    cout << bingoAI[i][bestY] << "을(를) 지우겠습니다" << endl;
+                    best = bingoAI[i][bestY];
+                    bingoAI[i][bestY] = 999;
+                    check = true;
+                    break;
+                }
+            }
+        }
+    }
+    cout << endl << "--------------------------------------------------" << endl;
+
+    return best;
 }
 
 int main()
@@ -238,15 +312,17 @@ int main()
         showBingo(bingoAI);
         cout << endl;
         cout << "\t     AI 빙고판" << endl;
-        cout << endl; cout << endl; cout << endl;
+        cout << endl; 
 
-        //cout << "테스트 중인 문구 best" << test << endl;
-        cout << "아무 숫자를 입력하세요" << endl;
-        cout << ">> ";
+        checkAI(bingoAI);
+        cout << "아무 숫자를 입력하세요 >> ";
+        
         
         int input;
         cin >> input;
 
+        /*if (input == checkAI(bingoAI))
+            break;*/
         /*
         int* p = nullptr; // GetUser();
         if (!p)
@@ -272,7 +348,6 @@ int main()
         checkNum(bingoAI, input);
         bingoCountAI = checkBingo(bingoAI);
 
-        test = checkAI(bingoAI);
         // AI의 빙고 체크하는 로직
         // 난수를 입력 받는 AI
         // [내가 가진 빙고 수 중에 가장 유리한 걸 고르는 게] 똑똑한 AI
