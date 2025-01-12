@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Player.h"
+#include "Bullet.h"
 
 Player::Player()
 	: _gauge(0.f)
@@ -22,7 +23,6 @@ void Player::Init()
 	// 커스텀 변수들
 	
 	_angle = atan2(_direction.y, _direction.x); //* 180 / 3.141592;
-	//_direction = Vector2(1, 0);
 	_direction = Vector2((float)cos(_angle), sin(_angle));
 	_gaugeRect = RectMakePivot(_position + Vector2(0, 60), Vector2(40.f, 10.f), Pivot::Center);
 
@@ -69,8 +69,8 @@ void Player::Update()
 		{
 			// 바로바로 생성하셔도 무방
 			// 저는 미리 생성해 놓고 꺼내 쓰는 방식을 선택함 (PlayGround::Init 참고)
-			auto vTest = OBJECTMANAGER->FindObjects(ObjectType::Bullet, L"Bullet");
-			for (auto pObj : vTest) {	//벡터 반복문
+			auto vBullet = OBJECTMANAGER->FindObjects(ObjectType::Bullet, L"Bullet");
+			for (auto pObj : vBullet) {	//벡터 반복문
 				if (pObj->GetActive())
 					continue;
 				pObj->Init();
@@ -81,8 +81,8 @@ void Player::Update()
 		}
 		else
 		{
-			auto vTest = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
-			for (auto pObj : vTest) {
+			auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
+			for (auto pObj : vReinforcedBullet) {
 				if (pObj->GetActive())
 					continue;
 				pObj->Init();
@@ -96,15 +96,40 @@ void Player::Update()
 #pragma region 7주차 과제_산탄
 	if (KEYMANAGER->IsOnceKeyDown(0x5A))
 	{
-		auto vTest = OBJECTMANAGER->FindObjects(ObjectType::Shot, L"Shot");
-		for (auto pObj : vTest) {
+		auto vShot = OBJECTMANAGER->FindObjects(ObjectType::Shot, L"Shot");
+		for (auto pObj : vShot) {
 			if (pObj->GetActive())
 				continue;
+
 			pObj->Init();
 			pObj->SetActive(true);
 			break;
 		}
-		//_gauge = 0; 필요 없는 듯
+		for (auto pObj : vShot) {
+			if (pObj->GetActive())
+				continue;
+
+			auto pShotObj = dynamic_cast<Shot*>(pObj);
+
+			pShotObj->Init();
+			pShotObj->SetType(0.1);
+			pShotObj->SetActive(true);
+
+			break;
+		}
+		for (auto pObj : vShot) {
+			if (pObj->GetActive())
+				continue;
+
+			auto pShotObj = dynamic_cast<Shot*>(pObj);
+
+			pShotObj->Init();
+			pShotObj->SetType(-0.1);
+			pShotObj->SetActive(true);
+
+			break;
+		}
+		//3개의 Init 방법 고민_ 벡터를 돌면서 active의 값을 true인지 false인지 구별하며 3번 Init
 	}
 #pragma endregion
 }
@@ -119,8 +144,6 @@ void Player::Render()
 	FloatRect greenRect{ _gaugeRect.left, _gaugeRect.top, _gaugeRect.left + _gaugeRect.GetWidth() * _gauge, _gaugeRect.bottom };
 	_D2DRenderer->FillRectangle(greenRect, D2DRenderer::DefaultBrush::Green);
 	_D2DRenderer->DrawRectangle(_gaugeRect);
-
-	
 }
 
 void Player::Move(Vector2 moveDirection, float speed)

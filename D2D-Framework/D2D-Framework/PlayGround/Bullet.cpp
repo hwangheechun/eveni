@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Bullet.h"
 #include "Player.h"
+#include <string>
 
 Bullet::Bullet()
 	: _player(nullptr), _isInit(false)
@@ -10,6 +11,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
+	//소멸자 구현 내용
 }
 
 void Bullet::Init()
@@ -31,20 +33,31 @@ void Bullet::Init()
 		
 		//_size.x = max(_size.x * _player->_gauge, 10);	//10보다 작으면 10, 10보다 크면 해당 값
 	}
+
+	
 }
 
 void Bullet::Release()
 {
+	Bullet::~Bullet();
 }
 
 void Bullet::Update()
 {
 	Move(_direction ,200.0f);
+
+	if (_position.x >= WINSIZEX || _position.x <= 0 || _position.y >= WINSIZEY || _position.y <= 0)
+	{
+		this->Release();
+	}
 }
 
 void Bullet::Render()
 {
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Black, 1.0f);
+	
+	
+	_D2DRenderer->RenderText(10, 10, L"일반 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void Bullet::Move(Vector2 moveDirection, float speed)
@@ -68,6 +81,7 @@ ReinforcedBullet::ReinforcedBullet()
 
 ReinforcedBullet::~ReinforcedBullet()
 {
+	
 }
 
 void ReinforcedBullet::Init()
@@ -93,6 +107,7 @@ void ReinforcedBullet::Init()
 
 void ReinforcedBullet::Release()
 {
+	ReinforcedBullet::~ReinforcedBullet();
 }
 
 void ReinforcedBullet::Update()
@@ -117,6 +132,8 @@ void ReinforcedBullet::Update()
 void ReinforcedBullet::Render()
 {
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Red, 3.0f);
+
+	_D2DRenderer->RenderText(10, 50, L"강화 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void ReinforcedBullet::Move(Vector2 moveDirection, float speed)
@@ -141,6 +158,7 @@ Shot::Shot()
 
 Shot::~Shot()
 {
+	
 }
 
 void Shot::Init()
@@ -164,6 +182,7 @@ void Shot::Init()
 
 void Shot::Release()
 {
+	Shot::~Shot();
 }
 
 void Shot::Update()
@@ -174,6 +193,8 @@ void Shot::Update()
 void Shot::Render()
 {
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Blue, 3.0f);
+
+	_D2DRenderer->RenderText(10, 70, L"산탄 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void Shot::Move(Vector2 moveDirection, float speed)
@@ -189,4 +210,10 @@ void Shot::MoveAngle(float speed)
 }
 #pragma endregion 
 
-
+void Shot::SetType(float a)
+{
+	//_direction.y = _player->GetDirection().y + a; 단순히 벡터의 가감으로는 원뿔 모양의 산탄이 형성되지 않음
+	
+	_direction.x = cos(_player->_angle + a);
+	_direction.y = sin(_player->_angle + a);
+}

@@ -18,6 +18,8 @@ public:
 	class Player* _player;
 	bool _isInit;
 	Vector2 _direction;
+
+	int countCollide;
 };
 
 class ReinforcedBullet : public GameObject
@@ -59,10 +61,8 @@ public:
 	bool _isInit;
 	Vector2 _direction;
 
-	enum class ShotType : int
-	{
-		first, second, third
-	};
-	void Init1(int a);
+	int countCollide;
+
+	void SetType(float a);
 };
 

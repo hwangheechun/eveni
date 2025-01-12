@@ -43,7 +43,7 @@ void PlayGround::Update()
 
 	OBJECTMANAGER->Update();
 
-	EventManager::GetInstance()->Update();
+	EventManager::GetInstance()->Update();	
 }
 
 void PlayGround::Render()
