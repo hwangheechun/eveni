@@ -11,7 +11,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
-	//소멸자 구현 내용
+
 }
 
 void Bullet::Init()
@@ -28,7 +28,7 @@ void Bullet::Init()
 	_player = dynamic_cast<Player*>(OBJECTMANAGER->FindObject(ObjectType::Player, L"Player"));
 	if (_player)
 	{
-		_position = _player->GetPosition() + _player->GetDirection() * 100;
+		_position = _player->GetPosition();
 		_direction = _player->GetDirection();	//추가한 문구
 		
 		//_size.x = max(_size.x * _player->_gauge, 10);	//10보다 작으면 10, 10보다 크면 해당 값
@@ -37,7 +37,7 @@ void Bullet::Init()
 
 void Bullet::Release()
 {
-	Bullet::~Bullet();
+
 }
 
 void Bullet::Update()
@@ -46,7 +46,10 @@ void Bullet::Update()
 
 	if (_position.x >= WINSIZEX || _position.x <= 0 || _position.y >= WINSIZEY || _position.y <= 0)
 	{
-		this->Release();
+		//this->Release();	객체가 없어지지 않는 오브젝트 풀링 방식이라 사용할 필요가 없다. 릴리즈 함수는 오브젝트 소멸 시 설정할 내용이 있다면 내부에 작성하여 사용하는 함수
+		//OBJECTMANAGER->RemoveObject(ObjectType::Bullet, this);	객체가 없어지지 않는다
+		Init();
+		//SetActive(false);	//액티브 값을 false로 바꿔 
 	}
 }
 
@@ -55,7 +58,7 @@ void Bullet::Render()
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Black, 1.0f);
 	
 	
-	//_D2DRenderer->RenderText(10, 10, L"일반 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
+	_D2DRenderer->RenderText(10, 10, L"일반 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void Bullet::Move(Vector2 moveDirection, float speed)
@@ -74,7 +77,6 @@ void Bullet::MoveAngle(float speed)
 ReinforcedBullet::ReinforcedBullet()
 	: _player(nullptr), _isInit(false)
 {
-	_position = Vector2(0, 0);
 	Init();
 }
 
@@ -86,7 +88,7 @@ ReinforcedBullet::~ReinforcedBullet()
 void ReinforcedBullet::Init()
 {
 	_name = L"ReinforcedBullet";
-	_position = Vector2(0, 0);
+	_position = Vector2(WINSIZEX / 2 - 100, WINSIZEY / 2 - 100);
 	_size = Vector2(20, 20);
 	_rect = RectMakePivot(_position, _size, Pivot::Center);
 	_active = false;	
@@ -97,23 +99,21 @@ void ReinforcedBullet::Init()
 	_player = dynamic_cast<Player*>(OBJECTMANAGER->FindObject(ObjectType::Player, L"Player"));
 	if (_player)
 	{
-		_position = _player->GetPosition() + _player->GetDirection() * 100;
+		_position = _player->GetPosition();
 		_direction = _player->GetDirection();
 	}
 
 	countCollide = 4;
-	_isFire = false;
 }
 
 void ReinforcedBullet::Release()
 {
-	ReinforcedBullet::~ReinforcedBullet();
+
 }
 
 void ReinforcedBullet::Update()
 {
-	if(_isFire)
-		Move(_direction, 450.0f);
+	Move(_direction, 450.0f);
 
 	if (countCollide > 0)
 	{
@@ -128,20 +128,13 @@ void ReinforcedBullet::Update()
 			countCollide--;
 		}
 	}
-	if (_player)
-	{
-		if(!_isFire)
-			_position = _player->GetPosition() + _player->GetDirection() * 100;
-			_direction = _player->GetDirection();
-	}
 }
 
 void ReinforcedBullet::Render()
 {
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Red, 3.0f);
 
-	//_D2DRenderer->RenderText(10, 50, L"강화 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
-	_D2DRenderer->RenderText(10, 50, to_wstring(_isFire), 20);
+	_D2DRenderer->RenderText(10, 50, L"강화 탄환 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void ReinforcedBullet::Move(Vector2 moveDirection, float speed)
@@ -183,14 +176,14 @@ void Shot::Init()
 	_player = dynamic_cast<Player*>(OBJECTMANAGER->FindObject(ObjectType::Player, L"Player"));
 	if (_player)
 	{
-		_position = _player->GetPosition() + _player->GetDirection() * 100;
+		_position = _player->GetPosition();
 		_direction = _player->GetDirection();	
 	}
 }
 
 void Shot::Release()
 {
-	Shot::~Shot();
+
 }
 
 void Shot::Update()
@@ -202,7 +195,7 @@ void Shot::Render()
 {
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Blue, 3.0f);
 
-	//_D2DRenderer->RenderText(10, 70, L"산탄 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
+	_D2DRenderer->RenderText(10, 70, L"산탄 x:" + to_wstring(_position.x) + L"  y:" + to_wstring(_position.y), 20);
 }
 
 void Shot::Move(Vector2 moveDirection, float speed)

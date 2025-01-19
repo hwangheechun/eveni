@@ -11,19 +11,19 @@ HRESULT PlayGround::Init()
 
 	OBJECTMANAGER->AddObject(ObjectType::Player, player);
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		Bullet* bullet = new Bullet();
 
 		OBJECTMANAGER->AddObject(ObjectType::Bullet, bullet);
 	}
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		ReinforcedBullet* reinforcedBullet = new ReinforcedBullet();
 
 		OBJECTMANAGER->AddObject(ObjectType::ReinforcedBullet, reinforcedBullet);
 	}
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		Shot* shot = new Shot();
 
 		OBJECTMANAGER->AddObject(ObjectType::Shot, shot);
