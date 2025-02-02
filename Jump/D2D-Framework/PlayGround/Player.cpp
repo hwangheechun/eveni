@@ -15,15 +15,15 @@ Player::~Player()
 void Player::Init()
 {
 	_name = L"Player";
-	_position = Vector2(WINSIZEX / 2 + 100, WINSIZEY / 2);
-	_size = Vector2(100, 100);
+	_position = Vector2(WINSIZEX / 2, WINSIZEY / 2 - 300);
+	_size = Vector2(50, 50);
 	_rect = RectMakePivot(_position, _size, Pivot::Center);	// 히트박스
 	_active = true;
 
 	// 커스텀 변수들
 	_direction = Vector2(1, 0);
 
-	_gravity = 30.0f;
+	_gravity = 10.0f;
 	_onGround = false;
 }
 
@@ -33,12 +33,12 @@ void Player::Release()
 
 void Player::Update()
 {
+	_gravity += 2.0f;
+
 	if(!_onGround)
-		Move(Vector2(0.0f, _gravity), 10);
+	Move(Vector2(0.0f, _gravity), 10);
 
-	//_position.y += _gravity;
-
-	const float rotationSpeed = 0.1f; // 회전 속도 (라디안)
+	const float rotationSpeed = 0.1f;
 
 	if (KEYMANAGER->IsStayKeyDown(VK_LEFT))
 	{
@@ -48,10 +48,7 @@ void Player::Update()
 	{
 		Move(Vector2(10, 0), 10);
 	}
-	if (KEYMANAGER->IsOnceKeyDown(VK_UP))
-	{
-		Move(Vector2(0, -1000), 10);
-	}
+	
 	if (KEYMANAGER->IsStayKeyDown(VK_SPACE))
 	{
 		
@@ -65,14 +62,13 @@ void Player::Update()
 
 	if (_position.y + _size.y / 2 >= _ground->GetPosition().y - _ground->GetSize().y / 2)
 	{
-		_gravity = 0;
 		_onGround = true;
-		//Move(Vector2(0.0f, -_gravity), 10);
-	}
-	else
-	{
-		_gravity = 30.0f;
-		_onGround = false;
+		
+		if (KEYMANAGER->IsOnceKeyDown(VK_UP))
+		{
+			_onGround = false;
+			_gravity = -60.0f;
+		}
 	}
 }
 
