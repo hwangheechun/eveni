@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Player.h"
+#include <string>
 
 Player::Player()
 	: _gauge(0.f)
@@ -23,6 +24,7 @@ void Player::Init()
 	_direction = Vector2(1, 0);
 
 	_gravity = 30.0f;
+	_onGround = false;
 }
 
 void Player::Release()
@@ -31,7 +33,8 @@ void Player::Release()
 
 void Player::Update()
 {
-	Move(Vector2(0.0f, _gravity), 10);
+	if(!_onGround)
+		Move(Vector2(0.0f, _gravity), 10);
 
 	//_position.y += _gravity;
 
@@ -45,16 +48,9 @@ void Player::Update()
 	{
 		Move(Vector2(10, 0), 10);
 	}
-	if (KEYMANAGER->IsOnceKeyDown(VK_SPACE))
+	if (KEYMANAGER->IsOnceKeyDown(VK_UP))
 	{
-		auto vTest = OBJECTMANAGER->FindObjects(ObjectType::Bullet, L"Bullet");
-		for (auto pObj : vTest) {
-			if (pObj->GetActive())
-				continue;
-			pObj->Init();
-			pObj->SetActive(true);
-			break;
-		}
+		Move(Vector2(0, -1000), 10);
 	}
 	if (KEYMANAGER->IsStayKeyDown(VK_SPACE))
 	{
@@ -70,7 +66,13 @@ void Player::Update()
 	if (_position.y + _size.y / 2 >= _ground->GetPosition().y - _ground->GetSize().y / 2)
 	{
 		_gravity = 0;
+		_onGround = true;
 		//Move(Vector2(0.0f, -_gravity), 10);
+	}
+	else
+	{
+		_gravity = 30.0f;
+		_onGround = false;
 	}
 }
 
@@ -80,6 +82,8 @@ void Player::Render()
 	_D2DRenderer->DrawRectangle(_rect, D2DRenderer::DefaultBrush::Black, 1.0f);		// 라인
 
 	_D2DRenderer->DrawLine(_position, _position + _direction * 100);
+
+	_D2DRenderer->RenderText(0, 0, L"땅에 착지하면 true" + to_wstring(_onGround), 50);
 }
 
 void Player::Move(Vector2 moveDirection, float speed)

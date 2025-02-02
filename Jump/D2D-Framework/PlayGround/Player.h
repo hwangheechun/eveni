@@ -24,5 +24,6 @@ public:
 
 	float _gravity;
 	GameObject* _ground;
+	bool _onGround;
 };
 
