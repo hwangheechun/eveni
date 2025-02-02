@@ -16,17 +16,14 @@ public:
 	void MoveAngle(float speed);
 
 	class Player* _player;
-	class AI* _ai;
 	bool _isInit;
 	Vector2 _direction;
 
 	int countCollide;
 	bool _isFire;
 
-	void Trajectory();	//궤적
+	FloatRect trajectory;	//궤적
 	Vector2 _gravity;			//중력
-
-	bool _isAI;
 };
 
 class ReinforcedBullet : public GameObject
@@ -51,7 +48,7 @@ public:
 	bool _isFire;
 	bool _isReady;
 
-	void Trajectory();	//궤적
+	FloatRect _trajectory;	//궤적
 	Vector2 _gravity;			//중력
 };
 

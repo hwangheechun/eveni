@@ -43,17 +43,6 @@ void Player::Update()
 	auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
 	auto vShot = OBJECTMANAGER->FindObjects(ObjectType::Shot, L"Shot");
 
-	for (auto pObj : vReinforcedBullet) {
-		if (pObj->GetActive())
-			continue;
-
-		auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
-
-		pReinforcedBulletObj->Init();
-		break;
-	}
-
-
 	if (KEYMANAGER->IsStayKeyDown(0x57))	//W키
 	{
 #pragma region 7주차 과제_왼쪽 회전 처리
@@ -125,6 +114,7 @@ void Player::Update()
 
 				auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
 
+				pReinforcedBulletObj->Init();
 				pReinforcedBulletObj->SetActive(true);
 				pReinforcedBulletObj->_isFire = true;
 				pReinforcedBulletObj->_isReady = false;
@@ -205,9 +195,6 @@ void Player::Update()
 
 void Player::Render()
 {
-	auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
-
-
 	_D2DRenderer->FillRectangle(_rect, D2DRenderer::DefaultBrush::White);			// 채우기
 	_D2DRenderer->DrawRectangle(_rect, D2DRenderer::DefaultBrush::Black, 1.0f);		// 라인
 
@@ -222,19 +209,8 @@ void Player::Render()
 	_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
 	_D2DRenderer->DrawRectangle(_HP);
 
-	if (KEYMANAGER->IsStayKeyDown(VK_SPACE))
-	{
-		for (auto pObj : vReinforcedBullet) {
-			if (pObj->GetActive())
-				continue;
-
-			auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
-
-			pReinforcedBulletObj->Trajectory();
-			break;
-		}
-		
-	}
+	_D2DRenderer->RenderText(10, 10, to_wstring(_position.x) + L" ", 20);
+	_D2DRenderer->RenderText(10, 30, to_wstring(_HPBar) + L" ", 20);
 }
 
 void Player::Move(Vector2 moveDirection, float speed)

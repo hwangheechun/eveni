@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "AI.h"
 #include <string>
-#include "../PlayGround/Bullet.h"
 
 AI::AI()
 	: _gauge(0.f)
@@ -20,7 +19,7 @@ void AI::Init()
 	_size = Vector2(100, 100);
 	_rect = RectMakePivot(_position, _size, Pivot::Center);	// 히트박스
 	_active = true;
-	_direction = Vector2(-1, 0);
+
 	// 커스텀 변수들
 
 	_angle = atan2(_direction.y, _direction.x); //* 180 / 3.141592;
@@ -29,8 +28,6 @@ void AI::Init()
 
 	_HP = RectMakePivot(Vector2(1420, 80), Vector2(800.f, 80.f), Pivot::Center);
 	_HPBar = 1.f;
-
-	_moveTime = 0;
 }
 
 void AI::Release()
@@ -39,25 +36,9 @@ void AI::Release()
 
 void AI::Update()
 {
-	srand((unsigned int)time(NULL));
-
 	auto vBullet = OBJECTMANAGER->FindObjects(ObjectType::Bullet, L"Bullet");
-	auto AIvBullet = OBJECTMANAGER->FindObjects(ObjectType::AIBullet, L"Bullet");
 	auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
 
-	for (auto pObj : AIvBullet) {
-		if (pObj->GetActive())
-			continue;
-
-		auto pBulletObj = dynamic_cast<Bullet*>(pObj);
-
-		pBulletObj->_isAI = true;
-		break;
-	}
-
-	_gaugeRect = RectMakePivot(_position + Vector2(0, 60), Vector2(40.f, 10.f), Pivot::Center);
-	if(_position.x > 1350 || _position.x < 1920)
-		Move(Vector2((rand() % 21 - 10), 0), 10);	//랜덤 움직임 -10 ~ 10
 
 	for (auto pObj : vBullet) {	//벡터 반복문
 		if (pObj->GetPosition().x < _position.x + _size.x / 2 && pObj->GetPosition().x > _position.x - _size.x / 2
@@ -68,7 +49,7 @@ void AI::Update()
 			//포탄 충돌 처리
 			isCollide = true;
 
-			_HPBar -= 2.0f * TIMEMANAGER->GetElapsedTime();
+			_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
 			pObj->SetActive(false);
 		}
 	}
@@ -84,19 +65,6 @@ void AI::Update()
 			pObj->SetActive(false);
 		}
 	}
-
-	for (auto pObj : AIvBullet) {	
-		if (pObj->GetActive())
-			continue;
-		pObj->Init();
-		pObj->SetActive(true);
-
-		auto pBulletObj = dynamic_cast<Bullet*>(pObj);
-
-		pBulletObj->_isAI = true;
-		pBulletObj->_isFire = true;
-		break;
-	} // 이 부분 바꿔야 할 것 같음 
 }
 
 void AI::Render()
