@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#
 
 class Player : public GameObject
 {
@@ -20,5 +21,8 @@ public:
 
 	float _gauge;
 	FloatRect _gaugeRect;
+
+	float _gravity;
+	GameObject* _ground;
 };
 

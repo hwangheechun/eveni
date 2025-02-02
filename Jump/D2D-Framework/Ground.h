@@ -23,4 +23,5 @@ public:
 
 	float _gauge;
 	FloatRect _gaugeRect;
+	Vector2 GetSize() { return _size; };
 };

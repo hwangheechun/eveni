@@ -17,6 +17,7 @@ void Ground::Init()
 	_position = Vector2(WINSIZEX / 2, WINSIZEY - 50);
 	_size = Vector2(WINSIZEX, 45);
 	_rect = RectMakePivot(_position, _size, Pivot::Center);	// 히트박스
+	_gravity = 1.0f;
 }
 
 void Ground::Release()
