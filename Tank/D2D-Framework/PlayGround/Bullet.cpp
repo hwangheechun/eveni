@@ -187,6 +187,7 @@ void ReinforcedBullet::Update()
 
 void ReinforcedBullet::Render()
 {
+	//Trajectory();
 	D2DRenderer::GetInstance()->DrawEllipse(_position, _size.x, D2DRenderer::DefaultBrush::Red, 3.0f);
 }
 

@@ -28,5 +28,9 @@ public:
 	bool isCollide;
 
 	float _moveTime;
+
+	class GameObject* _player;
+
+	bool isDead;
 };
 

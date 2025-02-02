@@ -29,6 +29,7 @@ void Player::Init()
 
 	_HP = RectMakePivot(Vector2(500, 80), Vector2(800.f, 80.f), Pivot::Center);
 	_HPBar = 1.f;
+	isDead = false;
 }
 
 void Player::Release()
@@ -186,8 +187,16 @@ void Player::Update()
 			//포탄 충돌 처리
 			isCollide = true;
 
-			_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
-			pObj->SetActive(false);
+			if (_HPBar <= 0)
+			{
+				isDead = true;
+				break;
+			}
+			else
+			{
+				_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
+			}
+			pObj->SetActive(false);			
 		}
 	}
 }
@@ -218,8 +227,9 @@ void Player::Render()
 		auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
 
 		pReinforcedBulletObj->Trajectory();
-		break;
+		
 	}
+
 }
 
 void Player::Move(Vector2 moveDirection, float speed)

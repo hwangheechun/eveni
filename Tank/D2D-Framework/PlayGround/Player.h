@@ -26,5 +26,6 @@ public:
 	FloatRect _HP;
 	float _HPBar;
 	bool isCollide;
+	bool isDead;
 };
 
