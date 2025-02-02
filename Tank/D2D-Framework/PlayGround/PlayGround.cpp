@@ -15,10 +15,16 @@ HRESULT PlayGround::Init()
 
 	OBJECTMANAGER->AddObject(ObjectType::AI, ai);
 
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 20; ++i) {
 		Bullet* bullet = new Bullet();
 
 		OBJECTMANAGER->AddObject(ObjectType::Bullet, bullet);
+	}
+
+	for (int i = 0; i < 1; ++i) {
+		Bullet* bullet2 = new Bullet();
+
+		OBJECTMANAGER->AddObject(ObjectType::AIBullet, bullet2);
 	}
 
 	for (int i = 0; i < 1; ++i) {
@@ -27,16 +33,16 @@ HRESULT PlayGround::Init()
 		OBJECTMANAGER->AddObject(ObjectType::ReinforcedBullet, reinforcedBullet);
 	}
 
+	for (int i = 0; i < 1; ++i) {
+		ReinforcedBullet* AIreinforcedBullet = new ReinforcedBullet();
+
+		OBJECTMANAGER->AddObject(ObjectType::ReinforcedBullet, AIreinforcedBullet);
+	}
+
 	for (int i = 0; i < 3; ++i) {
 		Shot* shot = new Shot();
 
 		OBJECTMANAGER->AddObject(ObjectType::Shot, shot);
-	}
-
-	for (int i = 0; i < 1; ++i) {
-		Bullet* AIbullet = new Bullet();
-
-		OBJECTMANAGER->AddObject(ObjectType::AIBullet, AIbullet);
 	}
 
 	return S_OK;

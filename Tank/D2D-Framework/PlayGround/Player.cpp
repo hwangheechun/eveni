@@ -43,6 +43,8 @@ void Player::Update()
 	auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
 	auto vShot = OBJECTMANAGER->FindObjects(ObjectType::Shot, L"Shot");
 
+	auto vAIBullet = OBJECTMANAGER->FindObjects(ObjectType::AIBullet, L"Bullet");
+
 	for (auto pObj : vReinforcedBullet) {
 		if (pObj->GetActive())
 			continue;
@@ -175,7 +177,7 @@ void Player::Update()
 #pragma endregion
 	
 		//충돌 처리
-	for (auto pObj : vBullet) {	//벡터 반복문
+	for (auto pObj : vAIBullet) {	//벡터 반복문
 		if (pObj->GetPosition().x < _position.x + _size.x / 2 && pObj->GetPosition().x > _position.x - _size.x / 2
 			&& pObj->GetPosition().y < _position.y + _size.y / 2 && pObj->GetPosition().y > _position.y - _size.y / 2
 			&& pObj->GetActive() == true)
@@ -188,19 +190,6 @@ void Player::Update()
 			pObj->SetActive(false);
 		}
 	}
-	for (auto pObj : vReinforcedBullet) {	//벡터 반복문
-		if (pObj->GetPosition().x < _position.x + _size.x / 2 && pObj->GetPosition().x > _position.x - _size.x / 2
-			&& pObj->GetPosition().y < _position.y + _size.y / 2 && pObj->GetPosition().y > _position.y - _size.y / 2
-			&& pObj->GetActive() == true)
-				
-		{
-			//포탄 충돌 처리
-			isCollide = true;
-
-			_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
-			pObj->SetActive(false);
-		}
-	}	
 }
 
 void Player::Render()

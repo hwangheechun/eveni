@@ -42,16 +42,19 @@ void AI::Update()
 	srand((unsigned int)time(NULL));
 
 	auto vBullet = OBJECTMANAGER->FindObjects(ObjectType::Bullet, L"Bullet");
-	auto AIvBullet = OBJECTMANAGER->FindObjects(ObjectType::AIBullet, L"Bullet");
+	auto vAIBullet = OBJECTMANAGER->FindObjects(ObjectType::AIBullet, L"Bullet");
 	auto vReinforcedBullet = OBJECTMANAGER->FindObjects(ObjectType::ReinforcedBullet, L"ReinforcedBullet");
 
-	for (auto pObj : AIvBullet) {
+	for (auto pObj : vAIBullet) {
 		if (pObj->GetActive())
 			continue;
 
+		
 		auto pBulletObj = dynamic_cast<Bullet*>(pObj);
+		pBulletObj->Init("AI");
+		pBulletObj->SetActive(true);
+		pBulletObj->_isFire = true;
 
-		pBulletObj->_isAI = true;
 		break;
 	}
 
@@ -84,19 +87,6 @@ void AI::Update()
 			pObj->SetActive(false);
 		}
 	}
-
-	for (auto pObj : AIvBullet) {	
-		if (pObj->GetActive())
-			continue;
-		pObj->Init();
-		pObj->SetActive(true);
-
-		auto pBulletObj = dynamic_cast<Bullet*>(pObj);
-
-		pBulletObj->_isAI = true;
-		pBulletObj->_isFire = true;
-		break;
-	} // 이 부분 바꿔야 할 것 같음 
 }
 
 void AI::Render()

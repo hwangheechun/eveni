@@ -3,7 +3,7 @@
 
 enum class ObjectType : int
 {
-	TileObject, Enemy, Player, AI, Bullet, ReinforcedBullet, Shot, AIBullet , Item, UI, End
+	TileObject, Enemy, Player, AI, Bullet, AIBullet, ReinforcedBullet, Shot, Item, UI, End
 };
 
 // 게임 오브젝트 관리 클래스

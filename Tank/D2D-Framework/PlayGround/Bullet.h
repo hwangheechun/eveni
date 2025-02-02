@@ -12,6 +12,8 @@ public:
 	void Update() override;
 	void Render() override;
 
+	void Init(string a);
+
 	void Move(Vector2 moveDirection, float speed);
 	void MoveAngle(float speed);
 
@@ -25,8 +27,31 @@ public:
 
 	void Trajectory();	//궤적
 	Vector2 _gravity;			//중력
+};
 
-	bool _isAI;
+class AIBullet : public GameObject
+{
+public:
+	AIBullet();
+	virtual ~AIBullet();
+
+	void Init() override;
+	void Release() override;
+	void Update() override;
+	void Render() override;
+
+	void Move(Vector2 moveDirection, float speed);
+	void MoveAngle(float speed);
+
+	class AI* _ai;
+	bool _isInit;
+	Vector2 _direction;
+
+	int countCollide;
+	bool _isFire;
+
+	void Trajectory();	//궤적
+	Vector2 _gravity;			//중력
 };
 
 class ReinforcedBullet : public GameObject
