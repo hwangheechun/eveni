@@ -112,7 +112,7 @@ void ReinforcedBullet::Init()
 	_isInit = false;
 
 	_player = dynamic_cast<Player*>(OBJECTMANAGER->FindObject(ObjectType::Player, L"Player"));
-	if (_player && _isReady)
+	if (_player)
 	{
 		_position = _player->GetPosition() + _player->GetDirection() * 100;
 		_direction = _player->GetDirection();

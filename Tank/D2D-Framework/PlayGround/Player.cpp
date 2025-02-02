@@ -222,18 +222,14 @@ void Player::Render()
 	_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
 	_D2DRenderer->DrawRectangle(_HP);
 
-	if (KEYMANAGER->IsStayKeyDown(VK_SPACE))
-	{
-		for (auto pObj : vReinforcedBullet) {
-			if (pObj->GetActive())
-				continue;
+	for (auto pObj : vReinforcedBullet) {
+		if (pObj->GetActive())
+			continue;
 
-			auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
+		auto pReinforcedBulletObj = dynamic_cast<ReinforcedBullet*>(pObj);
 
-			pReinforcedBulletObj->Trajectory();
-			break;
-		}
-		
+		pReinforcedBulletObj->Trajectory();
+		break;
 	}
 }
 
