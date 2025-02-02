@@ -33,6 +33,12 @@ HRESULT PlayGround::Init()
 		OBJECTMANAGER->AddObject(ObjectType::Shot, shot);
 	}
 
+	for (int i = 0; i < 1; ++i) {
+		Bullet* AIbullet = new Bullet();
+
+		OBJECTMANAGER->AddObject(ObjectType::AIBullet, AIbullet);
+	}
+
 	return S_OK;
 }
 
