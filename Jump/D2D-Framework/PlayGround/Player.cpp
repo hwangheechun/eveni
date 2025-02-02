@@ -64,7 +64,7 @@ void Player::Update()
 	{
 		_onGround = true;
 		
-		if (KEYMANAGER->IsOnceKeyDown(VK_UP))
+		if (KEYMANAGER->IsOnceKeyDown(VK_SPACE))
 		{
 			_onGround = false;
 			_gravity = -60.0f;
