@@ -217,8 +217,19 @@ void Player::Render()
 	_D2DRenderer->DrawRectangle(_gaugeRect);
 
 	FloatRect HPRect{ _HP.left, _HP.top, _HP.left + _HP.GetWidth() * _HPBar, _HP.bottom};
-	_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
+
+
 	_D2DRenderer->DrawRectangle(_HP);
+
+	if(_HPBar > 0.7f)
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
+	else if (_HPBar <= 0.7 && _HPBar > 0.2)
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Yellow);
+	else
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Red);
+
+	if (_HPBar <= 0)
+		_D2DRenderer->RenderText(WINSIZEX / 2, WINSIZEY / 2, L"패배", 50);
 
 	for (auto pObj : vReinforcedBullet) {
 		if (pObj->GetActive())

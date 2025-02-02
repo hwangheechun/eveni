@@ -74,7 +74,7 @@ void Bullet::Update()
 {
 	if (_isFire)
 	{
-		Move(_direction, 750.0f);
+		Move(_direction, 650.0f);
 		_direction += _gravity * TIMEMANAGER->GetElapsedTime();
 	}
 
@@ -150,7 +150,7 @@ void ReinforcedBullet::Update()
 {
 	if (_isFire)
 	{
-		Move(_direction, 750.0f);
+		Move(_direction, 650.0f);
 		_direction += _gravity * TIMEMANAGER->GetElapsedTime();
 	}
 #pragma region 7주차 튕기기
@@ -209,7 +209,7 @@ void ReinforcedBullet::Trajectory()
 	_D2DRenderer->DrawLine(_position, _position + _direction * 10);
 	for (int i = 0; i < 10000; i++)
 	{
-		Move(_direction, 750.0f);
+		Move(_direction, 650.0f);
 		_direction += _gravity * TIMEMANAGER->GetElapsedTime();
 		_D2DRenderer->DrawLine(_position, _position + _direction * 10);
 	}

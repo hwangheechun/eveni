@@ -20,7 +20,7 @@ void AI::Init()
 	_size = Vector2(100, 100);
 	_rect = RectMakePivot(_position, _size, Pivot::Center);	// 히트박스
 	_active = true;
-	_direction = Vector2(-1, -1);
+	_direction = Vector2(-1, 0);
 	// 커스텀 변수들
 
 	_angle = atan2(_direction.y, _direction.x); //* 180 / 3.141592;
@@ -83,7 +83,7 @@ void AI::Update()
 			}
 			else
 			{
-				_HPBar -= 2.0f * TIMEMANAGER->GetElapsedTime();
+				_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
 			}
 			pObj->SetActive(false);
 		}
@@ -96,14 +96,18 @@ void AI::Update()
 			
 			isCollide = true;
 
-			if (_HPBar <= 0)
+			if (_HPBar < 0)
 			{
+
 				isDead = true;
 				break;
 			}
 			else
 			{
-				_HPBar -= 5.0f * TIMEMANAGER->GetElapsedTime();
+				if (_HPBar >= 0.1f)
+					_HPBar -= 10.0f * TIMEMANAGER->GetElapsedTime();
+				else
+					_HPBar = 0.0f;
 			}
 			pObj->SetActive(false);
 		}
@@ -136,8 +140,19 @@ void AI::Render()
 	_D2DRenderer->DrawRectangle(_gaugeRect);
 
 	FloatRect HPRect{ _HP.left, _HP.top, _HP.left + _HP.GetWidth() * _HPBar, _HP.bottom };
-	_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
+
 	_D2DRenderer->DrawRectangle(_HP);
+
+	if (_HPBar > 0.7f)
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Green);
+	else if (_HPBar <= 0.7 && _HPBar > 0.2)
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Yellow);
+	else
+		_D2DRenderer->FillRectangle(HPRect, D2DRenderer::DefaultBrush::Red);
+
+	if (_HPBar <= 0)
+		_D2DRenderer->RenderText(WINSIZEX / 2, WINSIZEY / 2, L"승리", 50);
+	
 }
 
 void AI::Move(Vector2 moveDirection, float speed)

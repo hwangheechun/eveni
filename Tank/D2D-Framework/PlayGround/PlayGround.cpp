@@ -21,7 +21,7 @@ HRESULT PlayGround::Init()
 		OBJECTMANAGER->AddObject(ObjectType::Bullet, bullet);
 	}
 
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		Bullet* bullet2 = new Bullet();
 
 		OBJECTMANAGER->AddObject(ObjectType::AIBullet, bullet2);
